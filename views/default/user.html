@@ -1,0 +1,38 @@
+<head>
+   <title>SOSA | Register, Sign in & Lost Password</title>
+   <link rel="stylesheet" href="{{=URL('static','css/users.css')}}"/>
+   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+</head>
+{{extend 'layout.html'}}
+<!-- Container for the form -->
+<div class="container" style="min-height: 600px;">
+   <div class="wrapper">
+      <form action="" method="post" name="Login_Form" class="form-signin">
+         <h3 class="form-signin-heading">{{=T('Sign Up') if request.args(0) == 'register' else T('Log In') if request.args(0) == 'login' else T(request.args(0).replace('_',' ').title())}}</h3>
+         <hr class="colorgraph">
+         <br>
+         <!-- Register, Log in and Lost Password Form -->
+         {{
+         if request.args(0)=='login':
+         if not 'register' in auth.settings.actions_disabled:
+         form.add_button(T('Sign Up'),URL(args='register', vars={'_next': request.vars._next} if request.vars._next else None),_class='btn btn-default')
+         pass
+         if not 'request_reset_password' in auth.settings.actions_disabled:
+         form.add_button(T('Lost Password'),URL(args='request_reset_password'),_class='btn btn-default')
+         pass
+         pass
+         =form
+         }}
+      </form>
+   </div>
+</div>
+{{block page_js}}
+<script>
+   jQuery("#web2py_user_form input:visible:enabled:first").focus();
+   {{if request.args(0)=='register':}}
+   web2py_validate_entropy(jQuery('#auth_user_password'),100);
+   {{elif request.args(0)=='change_password':}}
+   web2py_validate_entropy(jQuery('#no_table_new_password'),100);
+   {{pass}}
+</script>
+{{end page_js}}

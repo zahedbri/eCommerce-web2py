@@ -1,0 +1,73 @@
+/* DOCUMENT INFORMATION
+* Document: Viewreviews.css
+* Version: v31
+* Assignment: WP Assignment Web2py 2017
+* Authors: Keeran, Regson, Marcel & Louis 
+*/
+
+/* ==== BODY ==== */
+
+/* Styling the body */
+body {
+    color: #262626;
+    font-family: "Open Sans", sans-serif;
+}
+
+/* ==== REVIEWS ==== */
+
+/* Styling the reviews */
+.well {
+    background-color: #FEFEFE;
+    border-bottom: 1px solid #ebebeb;
+    margin-bottom: 30px;
+}
+
+.well h4 {
+    font-size: 17px;
+}
+
+.well p {
+    font-size: 14px;
+}
+
+.col-md-5 h3 {
+    color: #262626;
+}
+
+.reviewer-name {
+  margin-right:10px;
+}
+
+/* ==== PAGE HEADERS ==== */
+
+/* Styling the page headers - Reviews */
+.page-header {
+    border-bottom: none;
+    margin-bottom: 20px;
+}
+
+.page-header h4 {
+ overflow: hidden;
+ text-align: center;
+ color: #000;
+ margin-bottom: 20px;
+}
+
+.page-header h4:before,
+.page-header h4:after {
+ background-color: #ebebeb;
+ content: "";
+ display: inline-block;
+ height: 1px;
+ position: relative;
+ vertical-align: middle;
+ width: 50%;
+}
+.page-header h4:before {
+ right: 1em;
+ margin-left: -50%;
+}
+.page-header h4:after {
+ left: 1em;
+ margin-right: -50%;
+}

@@ -1,0 +1,43 @@
+{{extend 'layout.html'}}
+<head>
+   <title>SOSA | View More Reviews</title>
+   <link rel="stylesheet" href="{{=URL('static','css/viewreviews.css')}}"/>
+</head>
+<div class="container">
+   <!-- Displays a back button to go back to the viewed product. Displays the product name and how many reviews have been made -->
+   {{for product in products:}}
+   <div class="page-header">
+      {{=bckButton}}
+      <h4><strong>View reviews for {{=product.productName}} ({{=reviewNumber}})</strong></h4>
+   </div>
+   <!-- If there are no reviews, it will display a message -->
+   {{if 0==reviewNumber:}}
+   <div class="no-reviews">
+      <p> No reviews made for this product, add one!</p>
+   </div>
+   {{pass}}
+   <!-- Displays the review information -->
+   {{for rofdasw in rows:}}
+   <div class="well well-sm">
+      <h4>"{{=rofdasw.reviewsTitle}}"
+         {{if auth.has_membership(group_id='2'):}}
+         <a href="{{=URL('viewProduct', vars={'item':request.vars.item, 'delete':rofdasw.id})}}" style=float:right;><button class="btn btn-default btn-xs">Delete Review</button></a>
+      </h4>
+      {{pass}}
+      <div>
+         <p title={{=rofdasw.reviewsRating}} style=display:inline;color:#262626;>
+            {{for di in xrange(5):}}
+            {{if di<int(rofdasw.reviewsRating):}}
+            ★
+            {{else:}}
+            ☆
+            {{pass}}
+            {{pass}} 
+         </p>
+      </div>
+      <p>{{=rofdasw.reviewsText}}</p>
+      <p><span class="reviewer-name"><strong>{{=rofdasw.created_by.first_name[:1]}}.{{=rofdasw.created_by.last_name}}</strong></span><span class="review-date">{{=rofdasw.created_on}}</span></p>
+   </div>
+   {{pass}}
+   {{pass}}
+</div>

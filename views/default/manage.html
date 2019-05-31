@@ -1,0 +1,15 @@
+{{extend 'layout.html'}}
+<div class="container">
+   <br>
+   <br>
+   <!-- A grid displaying the products along with view, edit, delete and add. -->
+   {{if (request.args(0) =="edit")  | (request.args(0) =="new"):}}
+   {{if not (request.args(0) =="new"):}}
+   {{=A(SPAN(_class='icon magnifier icon-zoom-in glyphicon glyphicon-zoom-in'),' View',_class='button btn btn-default',_href=URL("viewProduct",vars={'item':request.args(2)}))}}
+   {{pass}}
+   {{=A(SPAN(_class='icon leftarrow icon-arrow-left glyphicon glyphicon-arrow-left'),' Back',_class='button btn btn-default',_href=URL("manage"))}}
+   {{=form}}
+   {{else:}}
+   {{=grid}}
+   {{pass}}
+</div>

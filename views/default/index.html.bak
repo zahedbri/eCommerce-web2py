@@ -1,0 +1,113 @@
+<head>
+   <title>SOSA | High Quality Clothing</title>
+   <link rel="stylesheet" href="{{=URL('static','css/index.css')}}"/>
+   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+</head>
+{{extend 'layout.html'}}
+<!-- Carousel -->
+<div class="carousel fade-carousel slide" data-ride="carousel" data-interval="4000" id="bs-carousel">
+   <!-- Indicators -->
+   <ol class="carousel-indicators">
+      <li data-target="#bs-carousel" data-slide-to="0" class="active"></li>
+      <li data-target="#bs-carousel" data-slide-to="1"></li>
+      <li data-target="#bs-carousel" data-slide-to="2"></li>
+   </ol>
+   <!-- Wrapper for slides -->
+   <div class="carousel-inner">
+      <div class="item slides active">
+         <!-- Overlay for slides -->
+         <div class="overlay"></div>
+         <div class="slide-1"></div>
+         <div class="hero">
+            <hgroup>
+               <h1>Sosa Fashion</h1>
+               <h3>All of your favourite brands in one place</h3>
+            </hgroup>
+            <a class="btn btn-hero btn-lg" href="{{=URL('products')}}">SHOP NOW</a>
+         </div>
+      </div>
+      <div class="item slides">
+         <!-- Overlay for slides -->
+         <div class="overlay"></div>
+         <div class="slide-2"></div>
+         <div class="hero">
+            <hgroup>
+               <h1>Latest Trend</h1>
+               <h3>Get the latest look from Sosa</h3>
+            </hgroup>
+            <a class="btn btn-hero btn-lg" href="{{=URL('products')}}">SHOP NOW</a>
+         </div>
+      </div>
+      <div class="item slides">
+         <!-- Overlay for slides -->
+         <div class="overlay"></div>
+         <div class="slide-3"></div>
+         <div class="hero">
+            <hgroup>
+               <h1>New Season</h1>
+               <h3>Sosa has the latest look for you</h3>
+            </hgroup>
+            <a class="btn btn-hero btn-lg" href="{{=URL('products')}}">SHOP NOW</a>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- This is the 4 columns below slider -->
+<div class="container">
+   <div class="page-header">
+      <h4><strong>FEATURED COLLECTIONS</strong></h4>
+   </div>
+   <div class="first-row">
+      <div class="col-md-3">
+         <a href="{{=URL('products',vars={'type':'Suits'})}}"><img src="{{=URL('static', 'images/columns/suits.jpg')}}" alt="Men's Suits Collection" width="250"></a>
+      </div>
+      <div class="col-md-3">
+         <a href="{{=URL('products',vars={'type':'Jeans'})}}"><img src="{{=URL('static', 'images/columns/jeans.jpg')}}" alt="Men's Jeans Collection" width="250"></a>
+      </div>
+      <div class="col-md-3">
+         <a href="{{=URL('products',vars={'type':'Jackets'})}}"><img src="{{=URL('static', 'images/columns/jackets.jpg')}}" alt="Men's Jackets Collection" width="250"></a>
+      </div>
+      <div class="col-md-3">
+         <a href="{{=URL('products',vars={'type':'Tshirts'})}}"><img src="{{=URL('static', 'images/columns/tshirts.jpg')}}" alt="Men's T-Shirts Collection" width="250"></a>
+      </div>
+   </div>
+   <!-- This gets the top 8 highest rated products and displayed as best selling -->
+   <div class="page-header">
+      <h1>&nbsp;</h1>
+      <h4><strong>BEST SELLERS</strong></h4>
+   </div>
+   <div class="row">
+      {{for ten in top8:}}
+      <div class="col-md-3" style="height: 370px; text-align: center;">
+         <a href="{{=URL('viewProduct', vars={'item':ten.id})}}"><img src="{{=URL('default', 'download', args=ten.productImage)}}"  alt="{{=ten.productName}}" width="250"></a>
+         <p><a class="productDescription"href="{{=URL('viewProduct', vars={'item':ten.id})}}">{{=ten.productName}}</a></p>
+         <div class="price">
+            <p>{{=ten.productPrice}}</p>
+            <p title={{=ten.productAvgRating}} style=color:#262626;font-size:18px;>
+               {{for di in xrange(5):}}
+               {{if di<int(ten.productAvgRating):}}
+               ★
+               {{else:}}
+               ☆
+               {{pass}}
+               {{pass}}
+            </p>
+         </div>
+      </div>
+      {{pass}}
+   </div>
+   <!-- Brands that are featured on our site -->    
+   <div class="page-header">
+      <h4><strong>FEATURED BRANDS</strong></h4>
+      <div class="brands">
+         <a href="{{=URL('products')}}">
+         <img src="{{=URL('static', 'images/brands/carhartt.png')}}" alt="Carhartt Brand">
+         <img src="{{=URL('static', 'images/brands/huf.png')}}" alt="Huf Brand">
+         <img src="{{=URL('static', 'images/brands/sosa.png')}}" alt="Sosa Brand">
+         <img src="{{=URL('static', 'images/brands/vans.png')}}" alt="Vans Brand">
+         <img src="{{=URL('static', 'images/brands/levis.png')}}" alt="Levi's Brand">
+         <img src="{{=URL('static', 'images/brands/stussy.png')}}" alt="Stussy Brand">
+         </a>
+      </div>
+   </div>
+</div>

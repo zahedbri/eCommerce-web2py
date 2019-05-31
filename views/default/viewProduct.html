@@ -1,0 +1,183 @@
+{{extend 'layout.html'}}
+<head>
+   <title>SOSA | View Products</title>
+   <link rel="stylesheet" href="{{=URL('static','css/viewproducts.css')}}"/>
+   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+</head>
+<div class="container">
+   <!-- Displays the product name and provides the delete and edit buttons-->
+   {{for product in products:}}
+   <h5 class="page-header">Home > <a href="{{=URL('products', vars={'type':product.productType})}}" style="text-decoration: none; color: #262626;">{{=product.productType.capitalize()}}</a> > <strong>{{=product.productName.capitalize()}} </strong>{{if auth.has_membership(group_id='2'):}}<a href="{{=URL('manage/edit/products', args=[product.id])}}"style=float:right;><button class="btn btn-default btn-xs">Edit Product</button></a><a href="{{=URL('manage/delete/products', args=[product.id])}}"style=float:right; onclick="return confirm('Are you sure you would like to delete {{=product.productName.capitalize()}}?');"><button class="btn btn-default btn-xs">Delete Product</button></a>
+      {{pass}}
+   </h5>
+   <div class="row product">
+      <!-- If there is only one image of product, it will display one. If there are two images, it will display it as a carousel -->
+      <div class="col-md-7 col-md-offset-0">
+         <div class="product-image">
+            {{if product.productImage2:}}
+            <div id="myCarousel-2" class="carousel slide">
+               <ol class="carousel-indicators">
+                  <li data-target="#myCarousel-2" data-slide-to="0" class=""></li>
+                  <li data-target="#myCarousel-2" data-slide-to="1" class="active"></li>
+               </ol>
+               <div class="carousel-inner img-responsive center-block" style="width:300px; height:300px">
+                  <!-- Slide 1 -->
+                  <div class="item active">
+                     <img src="{{=URL('default', 'download', args=product.productImage)}}" alt="productImage" style=" width:300; height:300" class="center-block">
+                  </div>
+                  <!-- Slide 2 -->
+                  <div class="item">
+                     <img src="{{=URL('default', 'download', args=product.productImage2)}}" alt="productImage" style=" width:300; height:300" class="center-block">
+                  </div>
+               </div>
+               <a class="left carousel-control" href="#myCarousel-2" data-slide="prev" style="margin-left: 100px;"> <span class="glyphicon glyphicon-chevron-left"></span> </a>
+               <a class="right carousel-control" href="#myCarousel-2" data-slide="next" style="margin-right: 100px;"> <span class="glyphicon glyphicon-chevron-right"></span> </a>
+            </div>
+            {{else:}}
+            <img src="{{=URL('default', 'download', args=product.productImage)}}" alt="productImage" style="width:300; height:300" class="center-block">
+            {{pass}}
+         </div>
+      </div>
+      <!-- Product details -->
+      <div class="col-md-5" style="height:238px;">
+         <h3>{{=product.productName.capitalize()}}</h3>
+         <h4>£{{="{0:.2f}".format(product.productPrice)}}</h4>
+         <div class="review-container">
+            <h5 title={{=product.productAvgRating}}> {{for di in xrange(5):}}
+               {{if di<int(product.productAvgRating):}}
+               ★
+               {{else:}}
+               ☆
+               {{pass}}
+               {{pass}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Reviews">{{=reviewNumber}} Reviews</a>
+            </h5>
+         </div>
+         <div class="row">
+            <div class="col-md-12" style="margin-top:13px; margin-bottom: 20px;">
+               <select style="width:142px;">
+                  <option value="Select-size">Select size</option>
+                  <option value="Size-XS">Size XS</option>
+                  <option value="Size-S">Size S</option>
+                  <option value="Size-M">Size M</option>
+                  <option value="Size-L">Size L</option>
+                  <option value="Size-XL">Size XL</option>
+               </select>
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#">View size guide</a>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-md-12">
+               <button class="btn btn-default" type="button" style="width:70%;margin:0px;margin-top:16px;">Add to Bag</button>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- Product Info section -->
+   <div class="page-header">
+      <h4><strong>Product Info</strong></h4>
+      <p>{{=product.productDescription.capitalize()}}</p>
+   </div>
+   <br>
+   {{pass}}
+   <!-- Similar product section-->
+   <div class="page-header">
+      {{if countSimi>1:}}
+      <h4><strong>Similar Products</strong></h4>
+   </div>
+   <!-- Displays similar products relating to what the user is viewing -->
+   <div class="row">
+      {{for product in similarProducts:}}
+      {{if product.id != item:}}
+      <div class="col-sm-2" style="margin-left: 35px;">
+         <a href="{{=URL('viewProduct', vars={'item':product.id})}}">
+            <img src="{{=URL('default', 'download', args=product.productImage)}}" alt="productImage" width=150; height=175;>
+            <h5 class=sub-header>{{=product.productName.capitalize()}}</h5>
+         </a>
+         <p class="price"> £{{="{0:.2f}".format(product.productPrice)}}</p>
+         <p title={{=product.productAvgRating}}  style=color:#262626;font-size:18px; >{{for di in xrange(5):}}
+            {{if di<int(product.productAvgRating):}}
+            ★
+            {{else:}}
+            ☆
+            {{pass}}
+            {{pass}}   
+         </p>
+      </div>
+      {{pass}}
+      {{pass}}
+   </div>
+   {{pass}}
+   <!-- Reviews section-->
+   <div class="page-header">
+      <a name="reviews"></a>
+      <h4 class="reviews"><strong>Reviews</strong></h4>
+      <!-- Only displays the write a review button if user has registered an account -->
+      {{if auth.user:}}
+      <button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-default write-review">Write a Review</button>
+      {{pass}}
+      <!-- Displays a message if no reviews have been made for the product -->
+      {{if 0==reviewNumber:}}
+      <div class="no-reviews">
+         <p> No reviews made for this product, let us know your thoughts on this product.</p>
+      </div>
+      {{pass}}
+      <!-- Limits reviews to only 10 being shown but provides a link so the user can view more reviews on a separate page -->
+      {{if reviewNumber>10:}}
+      <a href="{{=URL('viewReviews', vars={'item':request.vars.item})}}" style="text-decoration: underline; color: #262626;"> View more reviews</a>
+      {{pass}}
+   </div>
+   <br>
+   <!-- Displays the reviews that users have written -->
+   {{for rofdasw in rows:}}
+   <div class="well well-sm">
+      <h4>
+         "{{=rofdasw.reviewsTitle}}"
+         <!-- Provides a delete review button if user is admin -->
+         {{if auth.has_membership(group_id='2'):}}
+         <a href="{{=URL('viewProduct', vars={'item':request.vars.item, 'delete':rofdasw.id})}}" style=float:right;><button class="btn btn-default btn-xs">Delete Review</button></a>
+      </h4>
+      {{pass}}
+      <div>
+         <p title={{=rofdasw.reviewsRating}} style=display:inline;color:#262626;>
+            {{for di in xrange(5):}}
+            {{if di<int(rofdasw.reviewsRating):}}
+            ★
+            {{else:}}
+            ☆
+            {{pass}}
+            {{pass}} 
+         </p>
+      </div>
+      <p>{{=rofdasw.reviewsText}}</p>
+      <p><span class="reviewer-name"><strong>{{=rofdasw.created_by.first_name[:1]}}.{{=rofdasw.created_by.last_name}}</strong></span><span class="review-date">{{=rofdasw.created_on}}</span></p>
+   </div>
+   {{pass}}
+</div>
+</div>
+</div> 
+<!-- When the user is registered, the write a review button prompts a modal -->
+{{if auth.user:}}
+<!-- line modal -->
+<div class="modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+            <h3 class="modal-title" id="lineModalLabel">Write a review about {{=product.productName}}</h3>
+         </div>
+         <div class="modal-body">
+            <!-- Form which user enters their review about the product -->
+            {{=form}}
+         </div>
+         <div class="modal-footer">
+            <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+               <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-default" data-dismiss="modal"  role="button">Close</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   {{pass}}
+</div>

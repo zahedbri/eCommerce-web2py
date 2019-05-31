@@ -1,0 +1,144 @@
+{{extend 'layout.html'}}
+<head>
+   <title>SOSA | Products</title>
+   <link rel="stylesheet" href="{{=URL('static','css/products.css')}}"/>
+   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+</head>
+<!-- Displays the page header - loading the title from the default.py -->
+<div class="page-header">
+   <h4><strong>{{=title}}</strong></h4>
+</div>
+<div class="container">
+   <div class="row">
+      <div class="col-sm-4 col-md-3">
+         <!-- Product Filter -->
+         <form id="filter">
+            <h3 class="headline">
+               <span>Filter Product</span>
+               <hr>
+            </h3>
+            <!-- Product Type - dropdown box -->
+            <h4 class="headline">
+               <span>Type</span>
+            </h4>
+            <select name="type" form="filter">
+               <option name="type"  value="None" selected="selected"> All </option>
+               {{for type in getTypes:}}
+               <option name="type" value="{{=type.productType}}">{{=type.productType.capitalize()}}</option>
+               {{pass}}
+            </select>
+            <!-- Product Size - Radio buttons -->
+            <h4 class="headline">
+               <span>Size</span>
+            </h4>
+            <div class="radio-filter">
+               <input type="radio" name="size" value="None" checked>
+               <label>All</label>
+            </div>
+            <div class="radio-filter">
+               <input type="radio" name="size" value="XS">
+               <label>XS</label>
+            </div>
+            <div class="radio-filter">
+               <input type="radio" name="size" value="S">
+               <label>S</label>
+            </div>
+            <div class="radio-filter">
+               <input type="radio" name="size" value="M">
+               <label>M</label>
+            </div>
+            <div class="radio-filter">
+               <input type="radio" name="size" value="L">
+               <label>L</label>
+            </div>
+            <div class="radio-filter">
+               <input type="radio" name="size" value="XL">
+               <label>XL</label>
+            </div>
+            <!-- Product Sort - Dropdown box -->
+            <h4 class="headline">
+               <span>Sort By</span>
+            </h4>
+            <div class="sort-filter">
+               <select name="sortBy" form="filter">
+                  <option name="sortBy" value="None" selected="selected" >Oldest</option>
+                  <option name="sortBy" value="price">Price</option>
+                  <option name="sortBy" value="AvgRating">Avg Customer Rating</option>
+                  <option name="sortBy" value="Name">Alphabetically</option>
+               </select>
+            </div>
+            <!-- Product Order by - Dropdown box -->
+            <h4 class="headline">
+               <span>Order By</span>
+            </h4>
+            <div class="filter-product">
+               <select name="orderBy" form="filter">
+                  <option name="orderBy" value="None" selected="selected" >Ascending</option>
+                  <option name="orderBy" value="desc">Descending</option>
+               </select>
+               <hr>
+            </div>
+            <div class="filter-buttons">
+               <input name="searchQuery" style='display:none' value={{=rSearch}}>
+               <input type="submit" value="Submit">
+               <a href="{{=URL(vars={'page':1,'searchQuery':None,'type':None,'sortBy':None,'orderBy':None,'size':None})}}" > 
+               <button style="display:inline;" >Reset</button>
+               </a>
+            </div>
+         </form>
+         <br>
+      </div>
+      <div class="col-sm-8 col-md-9">
+         <div class="row">
+            <!-- If the search or filter does not find product, it will display a warning message -->
+            {{if not count:}}
+            <div class="alert alert-warning">
+               <h3>Sorry, we could not find any matches for your search!</h3>
+               <p>Please check the spelling or try typing in another term</p>
+            </div>
+            {{pass}}
+            <!-- If the search or filter finds the product, it will display the product -->
+            {{for product in products:}}
+            <div class="col-sm-6 col-md-4" style="height:340px; text-align:center;">
+               <a href="{{=URL('viewProduct', vars={'item':product.id})}}">
+                  <img src="{{=URL('default', 'download', args=product.productImage)}}" alt="productImage" width=200; height=220;>
+                  <h5 class=sub-header>{{=product.productName.capitalize()}}</h5>
+               </a>
+               <p> £{{="{0:.2f}".format(product.productPrice)}}</p>
+               <p title={{=product.productAvgRating}} style=color:#262626;font-size:18px;>
+                  {{for di in xrange(5):}}
+                  {{if di<int(product.productAvgRating):}}
+                  ★
+                  {{else:}}
+                  ☆
+                  {{pass}}
+                  {{pass}}
+               </p>
+            </div>
+            {{pass}}
+         </div>
+      </div>
+      <!-- Pagination -->
+      <div class="row">
+         <div class="col-sm-12">
+            <ul class="pagination pull-right">
+               {{if count>=pagelimit:}}
+               <br>
+               <p> Page:
+                  {{for xnum in range(totalPages):}}
+                  <a href= "{{=URL(vars={'page':xnum+1,'searchQuery':rSearch,'type':rType,'sortBy':rSortBy,'orderBy':rOrderBy,'size':rSize})}}"> {{=xnum+1}}</a>
+                  {{pass}}
+                  {{if not int(request.vars.page)<=1:}}
+                  | <a href="{{=URL(vars={'page':int(request.vars.page)-1,'searchQuery':rSearch,'type':rType,'sortBy':rSortBy,'orderBy':rOrderBy,'size':rSize})}}">Previous</a>
+                  {{pass}}
+                  {{if not int(request.vars.page)>=totalPages:}}
+                  | <a href="{{=URL(vars={'page':int(request.vars.page)+1,'searchQuery':rSearch,'type':rType,'sortBy':rSortBy,'orderBy':rOrderBy,'size':rSize})}}">Next</a>
+                  {{pass}}
+               </p>
+               {{pass}}
+            </ul>
+         </div>
+      </div>
+   </div>
+</div>
